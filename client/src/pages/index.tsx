@@ -1,10 +1,16 @@
-import React from 'react'
+import { Container } from '@components/Container'
+import { Feed } from '@components/Feed'
+import { CreatePost } from '@components/Posts/CreatePost'
+import { StrictAuth } from '@components/StrictAuth'
 
 const IndexPage = () => {
   return (
-    <div>
-      <h1 className="text-3xl">This is the start of client</h1>
-    </div>
+    <StrictAuth>
+      <Container className="pt-10 max-w-lg">
+        <CreatePost />
+        <Feed />
+      </Container>
+    </StrictAuth>
   )
 }
 

@@ -23,6 +23,7 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@lib/*": ["src/lib/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
       "@root/*": ["./*"],
       "@styles/*": ["./public/styles/*"],
