@@ -1,9 +1,10 @@
 import { Request } from 'express'
 import admin from 'firebase-admin'
 import { User, UserDocument } from '../resources/user/user.model'
+import { config } from '../config/config'
 
 admin.initializeApp({
-  credential: admin.credential.cert('./fb-service-account.json'),
+  credential: admin.credential.cert(JSON.parse(config.serviceAccount)),
 })
 
 export const authMiddleware = async (req, _, next) => {
@@ -23,7 +24,6 @@ export const authMiddleware = async (req, _, next) => {
           uid: tokenData.uid,
         })
       }
-
     } catch (err) {
       console.error(err)
     }
