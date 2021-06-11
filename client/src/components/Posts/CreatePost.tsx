@@ -2,34 +2,52 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { Button } from '@components/Button'
 import { Input } from '@components/Forms/Input'
 import { Select } from '@components/Forms/Select'
+import axios from 'axios'
+import { useMutation, useQueryClient } from 'react-query'
+import { IPost } from './Post'
 
-interface CreatePostFormValues {
-  message: string
-  // TODO: change privacy to type ENUM
+export interface CreatePostFormValues {
+  content: string
   privacy: string
 }
 
-export const CreatePost = () => {
-  const formMethods = useForm<CreatePostFormValues>()
+export const createPostRequest = (formData: CreatePostFormValues) =>
+  axios.post<null, IPost>('/posts', formData)
 
+export const CreatePost = () => {
+  const queryClient = useQueryClient()
+  const { mutate: createPost, isLoading } = useMutation(
+    '/posts',
+    createPostRequest
+  )
+
+  const formMethods = useForm<CreatePostFormValues>()
   const {
     formState: { isSubmitting },
     handleSubmit,
+    reset,
   } = formMethods
 
-  const onSubmit = async (formData: CreatePostFormValues) => {
-    const { message } = formData
+  const onSubmit = async (formData: CreatePostFormValues) =>
+    createPost(
+      {
+        ...formData,
+      },
+      {
+        onSuccess: async () => {
+          await queryClient.refetchQueries('/posts')
+          reset()
+        },
+      }
+    )
 
-    // TODO: save post to MongoDB Database
-    // TODO: notification
-  }
   return (
     <div className="w-full px-4 pt-5 pb-6 mt-8 mb-6 bg-white rounded-none shadow-md sm:rounded-lg">
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
-            name="message"
-            type="message"
+            name="content"
+            type="text"
             isTextArea
             validations={{
               required: {
@@ -39,23 +57,24 @@ export const CreatePost = () => {
             }}
           />
 
-          {/* <select name="privacy">
-            <option value="value1">Value 1</option>
-            <option value="value2" selected>
-              Value 2
-            </option>
-            <option value="value3">Value 3</option>
-          </select> */}
           <div className="flex items-center space-x-4">
             <Select
               className="w-auto ml-auto"
               name="privacy"
-              options={['Público', 'Amigos']}
+              options={[
+                {
+                  value: 'PUBLIC',
+                  label: 'Público',
+                },
+                {
+                  value: 'PRIVATE',
+                  label: 'Amigos',
+                },
+              ]}
             />
             <Button
               type="submit"
-              isLoading={isSubmitting}
-              disabled={isSubmitting}
+              disabled={isLoading || isSubmitting}
               className="w-auto px-5 ml-auto"
             >
               Publicar

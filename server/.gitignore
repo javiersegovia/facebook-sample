@@ -5,3 +5,5 @@ coverage/
 .DS_Store
 .env*
 yarn-error.log*
+
+fb-service-account.json

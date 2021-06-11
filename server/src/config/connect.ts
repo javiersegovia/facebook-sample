@@ -3,7 +3,7 @@ import { config } from './config'
 
 export const connect = () => {
   return mongoose
-    .connect(config.dbURI, {
+    .connect(config.dbURL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

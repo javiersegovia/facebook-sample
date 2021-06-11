@@ -4,7 +4,7 @@ export const Spinner = () => {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      className="animate-spin text-black h-6 w-6"
+      className="animate-spin h-6 w-6"
     >
       <circle
         className="opacity-25"

@@ -11,5 +11,5 @@ const {
 export const config = {
   hostname: SERVER_HOSTNAME,
   port: Number(SERVER_PORT),
-  dbURI: DB_URL,
+  dbURL: DB_URL,
 }

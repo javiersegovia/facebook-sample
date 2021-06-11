@@ -1,29 +1,33 @@
 import '@styles/main.css'
 
 import { createContext, useContext } from 'react'
-import type { AppProps } from 'next/app'
-import { firebase } from '@lib/firebase'
+import { AppProps } from 'next/app'
+import { QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import { queryClient } from '@lib/query'
 import { Nav } from '@components/Nav'
-import { useAuth } from '@hooks/useAuth'
+import { useAuth, IUserSession } from '@hooks/useAuth'
 
-export const userContext = createContext<{
-  user: firebase.User | null
-  loading: boolean
-}>({ user: null, loading: true })
-
+export const userContext = createContext<IUserSession>({
+  user: null,
+  loading: true,
+})
 export const useSession = () => useContext(userContext)
 
 const UserProvider = userContext.Provider
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const { user, loading } = useAuth()
+  const session = useAuth()
 
   return (
     <>
-      <UserProvider value={{ user, loading }}>
-        <Nav />
-        <Component {...pageProps} />
-      </UserProvider>
+      <QueryClientProvider client={queryClient}>
+        <UserProvider value={session}>
+          <Nav />
+          <Component {...pageProps} />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </UserProvider>
+      </QueryClientProvider>
     </>
   )
 }

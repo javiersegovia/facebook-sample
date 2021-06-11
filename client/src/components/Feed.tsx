@@ -1,31 +1,17 @@
 import { useMemo, useState } from 'react'
-import { Post, IPost, PostPrivacy } from './Posts/Post'
+import axios from 'axios'
 import cx from 'classnames'
+import { useSession } from '@pages/_app'
+import { Post, IPost, PostPrivacy } from './Posts/Post'
+import { useQuery } from 'react-query'
+import { Spinner } from './Spinner'
 
-const posts: IPost[] = [
-  {
-    privacy: PostPrivacy.PUBLIC,
-    message:
-      'Public LoremLabore ullamco ullamco enim quis sit id commodo velit ullamco veniam laboris magna irure. Anim amet culpa ad ea nisi adipisicing laboris commodo. Elit qui anim reprehenderit aliquip ad sint veniam cupidatat sit aute ex veniam reprehenderit consectetur. Eiusmod pariatur culpa elit dolor laborum veniam reprehenderit ullamco reprehenderit.',
-  },
-  {
-    privacy: PostPrivacy.PRIVATE,
-    message:
-      'Private LoremLabore ullamco ullamco enim quis sit id commodo velit ullamco veniam laboris magna irure. Anim amet culpa ad ea nisi adipisicing laboris commodo. Elit qui anim reprehenderit aliquip ad sint veniam cupidatat sit aute ex veniam reprehenderit consectetur. Eiusmod pariatur culpa elit dolor laborum veniam reprehenderit ullamco reprehenderit.',
-  },
-  {
-    privacy: PostPrivacy.PRIVATE,
-    message:
-      'Private LoremLabore ullamco ullamco enim quis sit id commodo velit ullamco veniam laboris magna irure. Anim amet culpa ad ea nisi adipisicing laboris commodo. Elit qui anim reprehenderit aliquip ad sint veniam cupidatat sit aute ex veniam reprehenderit consectetur. Eiusmod pariatur culpa elit dolor laborum veniam reprehenderit ullamco reprehenderit.',
-  },
-  {
-    privacy: PostPrivacy.PUBLIC,
-    message:
-      'Public LoremLabore ullamco ullamco enim quis sit id commodo velit ullamco veniam laboris magna irure. Anim amet culpa ad ea nisi adipisicing laboris commodo. Elit qui anim reprehenderit aliquip ad sint veniam cupidatat sit aute ex veniam reprehenderit consectetur. Eiusmod pariatur culpa elit dolor laborum veniam reprehenderit ullamco reprehenderit.',
-  },
-]
+export const getPosts = () => axios.get<null, IPost[]>('/posts')
 
 export const Feed = () => {
+  const { user } = useSession()
+  const { data, isLoading } = useQuery('/posts', getPosts)
+
   const [filterBy, setFilterBy] = useState<PostPrivacy | null>(null)
 
   const updateFilter = (filterValue: PostPrivacy) => {
@@ -36,38 +22,53 @@ export const Feed = () => {
   }
 
   const filteredPosts = useMemo(() => {
-    if (!filterBy) return posts
+    if (!filterBy || !data) return data
 
-    return posts.filter((post) => filterBy === post.privacy)
-  }, [filterBy])
+    return data.filter((post) => filterBy === post.privacy)
+  }, [data, filterBy])
 
   return (
     <section className="mt-10">
       <span className="text-sm">Filtrar por...</span>
-      <div className="space-x-3 mb-5">
-        <button
-          type="button"
-          className={cx({
-            'font-bold underline': filterBy === PostPrivacy.PUBLIC,
-          })}
-          onClick={() => updateFilter(PostPrivacy.PUBLIC)}
-        >
-          Público
-        </button>
-        <button
-          type="button"
-          className={cx({
-            'font-bold underline': filterBy === PostPrivacy.PRIVATE,
-          })}
-          onClick={() => updateFilter(PostPrivacy.PRIVATE)}
-        >
-          Privado
-        </button>
+      <div className="mb-5 flex items-center w-full">
+        <div className="space-x-3">
+          <button
+            type="button"
+            className={cx({
+              'font-bold underline': filterBy === PostPrivacy.PUBLIC,
+            })}
+            onClick={() => updateFilter(PostPrivacy.PUBLIC)}
+          >
+            Público
+          </button>
+          <button
+            type="button"
+            className={cx({
+              'font-bold underline': filterBy === PostPrivacy.PRIVATE,
+            })}
+            onClick={() => updateFilter(PostPrivacy.PRIVATE)}
+          >
+            Amigos
+          </button>
+        </div>
+        {isLoading && <div className="ml-auto text-blue-600">
+          <Spinner />
+        </div>}
       </div>
       <div className="space-y-6 pb-10">
-        {filteredPosts.map((post, index) => (
-          <Post key={index} post={post} />
-        ))}
+        {filteredPosts?.length ? (
+          filteredPosts.map((post, index) => (
+            <Post
+              key={post._id}
+              post={post}
+              isOwner={user?.uid === post.author?.uid}
+            />
+          ))
+        ) : (
+          <div className="text-gray-700 text-center mt-10">
+            No se han encontrado posts.
+          </div>
+        )}
       </div>
     </section>
   )

@@ -12,7 +12,7 @@ export const StrictAuth = ({
 }: StrictAuthProps) => {
   const { user, loading } = useSession()
 
-  if (loading) return null
+  if (typeof window === undefined || loading) return null
 
   if (isRequired && !user) {
     Router.push('/login')

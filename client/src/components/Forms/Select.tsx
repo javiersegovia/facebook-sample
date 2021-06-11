@@ -12,7 +12,10 @@ type SelectProps = {
   className?: string
   placeholder?: string
   validations?: RegisterOptions
-  options: string[]
+  options: {
+    value: string
+    label: string
+  }[]
 }
 
 export const Select = ({
@@ -50,9 +53,9 @@ export const Select = ({
           className
         )}
       >
-        {options.map((optionValue) => (
-          <option key={optionValue} value={optionValue} className="capitalize">
-            {capitalize(optionValue.toLowerCase())}
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value} className="capitalize">
+            {opt.label}
           </option>
         ))}
       </select>

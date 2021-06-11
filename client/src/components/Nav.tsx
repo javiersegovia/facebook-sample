@@ -4,8 +4,10 @@ import { Container } from './Container'
 import { useSession } from '@pages/_app'
 import { firebase } from '@lib/firebase'
 
+// todo: add Loading placeholder
+
 export const Nav = () => {
-  const { user } = useSession()
+  const { user, loading } = useSession()
 
   const signOut = () => {
     firebase.auth().signOut()

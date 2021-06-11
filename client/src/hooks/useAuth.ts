@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react'
 import { firebase } from '@lib/firebase'
-import { useSession } from '@pages/_app'
-import Router from 'next/router'
 
-export const useAuth = () => {
-  const [session, setSession] = useState(() => {
-    const user = firebase.auth().currentUser
+export interface IUserSession {
+  user: firebase.User | null
+  loading: boolean
+}
 
-    return {
-      user,
-      loading: !user,
-    }
+export const getToken = (user: firebase.User) => user.getIdToken() || null
+
+export const useAuth = (): IUserSession => {
+  const user = firebase.auth().currentUser
+
+  const [session, setSession] = useState<IUserSession>({
+    user,
+    loading: !user,
   })
 
   const onAuthChange = (user: firebase.User | null) => {
@@ -23,18 +26,4 @@ export const useAuth = () => {
   }, [])
 
   return session
-}
-
-/** This hook is used to restrain the access to certain areas of the app
- * If user is required, will redirect to login if there is no user
- * If user is NOT required, will redirect to home if there is a user already
- */
-
-export const useRequiredAuth = (isRequired = true) => {
-  const user = useSession()
-
-  useEffect(() => {
-    if (!user && isRequired) Router.push('/login')
-    else if (user && !isRequired) Router.push('/')
-  }, [user])
 }
