@@ -9,8 +9,6 @@ const {
   FIREBASE_CREDENTIALS,
 } = process.env
 
-console.log(DB_URL)
-
 export const config = {
   serviceAccount: FIREBASE_CREDENTIALS,
   hostname: HOSTNAME,
