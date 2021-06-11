@@ -20,8 +20,13 @@ console.log(3)
 app.use(authMiddleware)
 console.log(4)
 
-app.listen(port, hostname, () => {
-  console.info(`Server up at http://${hostname}:${port}`)
-  connect()
-  routes(app)
-})
+try {
+  app.listen(port, () => {
+    console.info(`Server up at http://localhost:${port}`)
+    connect()
+    routes(app)
+  })
+} catch(e) {
+  console.info('Error connecting to the API')
+  console.info(e)
+}
