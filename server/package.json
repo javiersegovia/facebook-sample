@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "Javier Segovia",
   "license": "MIT",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "dev": "nodemon --config nodemon.json src/app.ts",
     "build": "tsc -p .",
