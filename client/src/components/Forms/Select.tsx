@@ -1,16 +1,14 @@
+import cx from 'classnames'
 import { FieldError, RegisterOptions, useFormContext } from 'react-hook-form'
+import { baseStyles, errorStyles } from './Input'
 import { ErrorMessage } from './ErrorMessage'
 import { Label } from './Label'
-import cx from 'classnames'
-import { capitalize } from '@lib/capitalize'
-import { baseStyles, errorStyles } from './Input'
 
 type SelectProps = {
   name: string
   label?: string
   value?: string
   className?: string
-  placeholder?: string
   validations?: RegisterOptions
   options: {
     value: string
@@ -21,7 +19,6 @@ type SelectProps = {
 export const Select = ({
   name,
   className = '',
-  placeholder,
   label,
   validations = {},
   options,
@@ -43,7 +40,6 @@ export const Select = ({
         })}
         id={name}
         name={name}
-        placeholder={placeholder}
         className={cx(
           'pr-8',
           {
@@ -54,7 +50,7 @@ export const Select = ({
         )}
       >
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value} className="capitalize">
+          <option key={opt.value} value={opt.value}>
             {opt.label}
           </option>
         ))}

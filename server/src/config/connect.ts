@@ -2,6 +2,8 @@ import mongoose from 'mongoose'
 import { config } from './config'
 
 export const connect = () => {
+  console.info('config.dbURL')
+  console.info(config.dbURL)
   return mongoose
     .connect(config.dbURL, {
       useNewUrlParser: true,

@@ -6,6 +6,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --config nodemon.json src/app.ts",
+    "build": "tsc -p .",
+    "start": "node ./dist/app.js",
     "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up",
     "docker:db": "docker-compose -f docker-compose.yml run -p 27017:27017 mongodb"
   },

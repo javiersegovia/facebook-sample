@@ -1,15 +1,13 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
-/** TODO: Replace this data with ENV */
-
 export const config = {
-  apiKey: 'AIzaSyDnd643NKHqaLu_XgsQU4qwmzmAbdOr1UE',
-  authDomain: 'facebook-sample-ts.firebaseapp.com',
-  projectId: 'facebook-sample-ts',
-  storageBucket: 'facebook-sample-ts.appspot.com',
-  messagingSenderId: '725650121650',
-  appId: '1:725650121650:web:c1e668554cad21c5123aab',
+  apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FB_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FB_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FB_APP_ID,
 }
 
 if (!firebase.apps.length) {

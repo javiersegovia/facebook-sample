@@ -36,7 +36,7 @@ export const getFeedPosts = (user: UserDocument) => {
       },
     ],
   })
-    .sort('-updatedAt')
+    .sort('-createdAt')
     .populate('author', 'name uid')
 }
 

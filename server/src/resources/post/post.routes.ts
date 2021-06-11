@@ -7,7 +7,6 @@ import {
   getFeedController,
   updatePostController,
 } from './post.controller'
-import { Post } from './post.model'
 import { createPostValidation, deletePostValidation, updatePostValidation } from './post.validation'
 
 export const postRoutes = (app: Express) => {
@@ -33,10 +32,4 @@ export const postRoutes = (app: Express) => {
     validate(deletePostValidation),
     deletePostController,
   )
-
-  // // todo: delete this route
-  // app.delete('/posts', async (req, res) => {
-  //   const posts = await Post.deleteMany()
-  //   return res.json(posts)
-  // })
 }

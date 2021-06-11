@@ -25,4 +25,3 @@ axios.interceptors.response.use(
 )
 
 export const queryClient = new QueryClient()
-

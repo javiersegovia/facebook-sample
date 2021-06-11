@@ -9,8 +9,6 @@ export interface PostDocument extends mongoose.Document {
   updatedAt: Date
 }
 
-//todo: add privacy
-
 const PostSchema = new mongoose.Schema(
   {
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

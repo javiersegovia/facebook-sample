@@ -1,31 +1,22 @@
-import { useMemo, useState } from 'react'
 import axios from 'axios'
 import cx from 'classnames'
+import { useQuery } from 'react-query'
 import { useSession } from '@pages/_app'
 import { Post, IPost, PostPrivacy } from './Posts/Post'
-import { useQuery } from 'react-query'
 import { Spinner } from './Spinner'
+import { useFilter } from '@hooks/useFilter'
 
 export const getPosts = () => axios.get<null, IPost[]>('/posts')
 
 export const Feed = () => {
   const { user } = useSession()
-  const { data, isLoading } = useQuery('/posts', getPosts)
+  const { data, isLoading } = useQuery('/posts', getPosts, {
+    retry: false,
+  })
 
-  const [filterBy, setFilterBy] = useState<PostPrivacy | null>(null)
-
-  const updateFilter = (filterValue: PostPrivacy) => {
-    setFilterBy((prev) => {
-      if (prev === filterValue) return null
-      return filterValue
-    })
-  }
-
-  const filteredPosts = useMemo(() => {
-    if (!filterBy || !data) return data
-
-    return data.filter((post) => filterBy === post.privacy)
-  }, [data, filterBy])
+  const { filterBy, updateFilter, filtered } = useFilter<PostPrivacy, IPost[]>(
+    data
+  )
 
   return (
     <section className="mt-10">
@@ -51,13 +42,15 @@ export const Feed = () => {
             Amigos
           </button>
         </div>
-        {isLoading && <div className="ml-auto text-blue-600">
-          <Spinner />
-        </div>}
+        {isLoading && (
+          <div className="ml-auto text-blue-600">
+            <Spinner />
+          </div>
+        )}
       </div>
       <div className="space-y-6 pb-10">
-        {filteredPosts?.length ? (
-          filteredPosts.map((post, index) => (
+        {filtered?.length ? (
+          filtered.map((post) => (
             <Post
               key={post._id}
               post={post}

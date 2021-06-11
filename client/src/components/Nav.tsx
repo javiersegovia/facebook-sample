@@ -4,8 +4,6 @@ import { Container } from './Container'
 import { useSession } from '@pages/_app'
 import { firebase } from '@lib/firebase'
 
-// todo: add Loading placeholder
-
 export const Nav = () => {
   const { user, loading } = useSession()
 
@@ -17,10 +15,14 @@ export const Nav = () => {
     <div className="w-full text-gray-800">
       <Container className="flex items-center py-6">
         <Link href="/" passHref>
-          <a className="font-bold">Logo</a>
+          <a className="font-bold text-blue-700 underline italic">Facebook Sample App</a>
         </Link>
         <div className="ml-auto flex divide-x divide-gray-400">
-          {user ? (
+          {loading ? (
+            <div className="animate-pulse space-x-4 flex">
+              <div className="rounded-md w-60 h-6 bg-gray-200"></div>
+            </div>
+          ) : user ? (
             <>
               <div className="px-5">
                 Hola, <strong className="text-blue-700">{user.email}</strong>

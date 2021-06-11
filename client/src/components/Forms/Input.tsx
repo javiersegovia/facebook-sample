@@ -1,7 +1,7 @@
+import cx from 'classnames'
 import { FieldError, RegisterOptions, useFormContext } from 'react-hook-form'
 import { ErrorMessage } from './ErrorMessage'
 import { Label } from './Label'
-import cx from 'classnames'
 
 export const baseStyles = ` 
   bg-white shadow-sm block w-full p-3 text-sm leading-6 rounded-md border border-gray-300 
@@ -38,7 +38,6 @@ export const Input = ({
   } = useFormContext()
 
   const fieldError: FieldError | undefined = errors?.[name]
-
   const InputElement = isTextArea ? 'textarea' : 'input'
 
   return (

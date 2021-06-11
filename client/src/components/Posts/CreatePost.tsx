@@ -1,9 +1,9 @@
+import axios from 'axios'
+import { useMutation, useQueryClient } from 'react-query'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Button } from '@components/Button'
 import { Input } from '@components/Forms/Input'
 import { Select } from '@components/Forms/Select'
-import axios from 'axios'
-import { useMutation, useQueryClient } from 'react-query'
 import { IPost } from './Post'
 
 export interface CreatePostFormValues {
@@ -48,6 +48,7 @@ export const CreatePost = () => {
           <Input
             name="content"
             type="text"
+            placeholder="¿Qué estás pensando?"
             isTextArea
             validations={{
               required: {

@@ -8,6 +8,8 @@ const {
   DB_URL = 'mongodb://mongodb:27017',
 } = process.env
 
+console.log(DB_URL)
+
 export const config = {
   hostname: SERVER_HOSTNAME,
   port: Number(SERVER_PORT),

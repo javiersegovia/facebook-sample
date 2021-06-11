@@ -1,10 +1,9 @@
-import { Input } from '@components/Forms/Input'
-import React from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { IPost } from './Post'
-import { CreatePostFormValues } from './CreatePost'
-import { useMutation, useQueryClient } from 'react-query'
 import axios from 'axios'
+import { FormProvider, useForm } from 'react-hook-form'
+import { useMutation, useQueryClient } from 'react-query'
+import { Input } from '@components/Forms/Input'
+import { CreatePostFormValues } from './CreatePost'
+import { IPost } from './Post'
 
 interface UpdatePostProps {
   post: IPost
@@ -37,29 +36,22 @@ export const UpdatePost = ({ post, closeUpdate }: UpdatePostProps) => {
   } = formMethods
 
   const onSubmit = async (formData: CreatePostFormValues) => {
-    console.log({ formData })
     updatePost(
       {
         ...formData,
         postId: post._id,
       },
       {
-        onSuccess: async (updatedPost) => {
-          await queryClient.setQueryData('/posts', (cache: IPost[] = []) => {
+        onSuccess: (updatedPost) => {
+          queryClient.setQueryData('/posts', (cache: IPost[] = []) => {
             const index = cache.findIndex(
               (post) => post._id === updatedPost._id
             )
 
-            console.log(updatedPost)
-
-            console.log({ cache, index })
-
             cache[index] = {
-              // ...cache[index],
+              ...cache[index],
               ...updatedPost,
             }
-
-            console.log({ cache })
 
             return cache
           })
@@ -94,6 +86,7 @@ export const UpdatePost = ({ post, closeUpdate }: UpdatePostProps) => {
             </button>
             <button
               type="button"
+              disabled={isSubmitting || isLoading}
               className="text-red-600 font-bold"
               onClick={closeUpdate}
             >

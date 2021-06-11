@@ -5,11 +5,16 @@ interface ILabelProps {
   className?: string
 }
 
-export const Label = ({ htmlFor = '', description, className = '', children }: ILabelProps) => {
-  return (
-    <label htmlFor={htmlFor} className={`block ${className}`}>
-      {description && <span className="block mb-1 text-xs font-bold">{description}</span>}
-      {children}
-    </label>
-  )
-}
+export const Label = ({
+  htmlFor = '',
+  description,
+  className = '',
+  children,
+}: ILabelProps) => (
+  <label htmlFor={htmlFor} className={`block ${className}`}>
+    {description && (
+      <span className="block mb-1 text-xs font-bold">{description}</span>
+    )}
+    {children}
+  </label>
+)

@@ -1,6 +1,6 @@
-import { useToggle } from '@hooks/useToggle'
 import axios from 'axios'
 import { useMutation, useQueryClient } from 'react-query'
+import { useToggle } from '@hooks/useToggle'
 import { UpdatePost } from './UpdatePost'
 
 export enum PostPrivacy {
@@ -31,8 +31,6 @@ const deletePostRequest = (postId: string) =>
 export const Post = ({ post, isOwner }: PostProps) => {
   const { author, content } = post
 
-  console.log({ post })
-
   const [isDeleting, { setTrue: setDeletingTrue, setFalse: setDeletingFalse }] =
     useToggle(false)
 
@@ -49,7 +47,10 @@ export const Post = ({ post, isOwner }: PostProps) => {
 
   return (
     <div className="px-4 py-5 bg-white shadow-md rounded-none sm:rounded-lg sm:px-6 flex flex-col relative overflow-hidden">
-      <div className="text-blue-700 font-bold">{author.name}</div>
+      <div className="flex items-center justify-between">
+        <div className="text-blue-700 font-bold">{author.name}</div>
+        {post.privacy === PostPrivacy.PRIVATE && <span className="text-gray-400 italic text-xs">Amigos</span>}
+      </div>
 
       {isUpdating ? (
         <UpdatePost post={post} closeUpdate={setUpdatingFalse} />
